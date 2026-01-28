@@ -33,21 +33,104 @@ window.addEventListener('scroll', () => {
     });
 });
 
-// Add click handlers for read buttons and category cards
+// Enhanced click handlers for read buttons
 document.querySelectorAll('.read-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        alert('Article reading feature coming soon!');
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const article = this.closest('.featured-content, .card-content');
+        if (article) {
+            const title = article.querySelector('h2, h3')?.textContent || 'Article';
+            showModal('Article: ' + title, 'Full article content coming soon. Subscribe to TechEdu for exclusive educational tech news!');
+        }
     });
 });
 
+// Enhanced news card interactivity
 document.querySelectorAll('.news-card').forEach(card => {
     card.addEventListener('click', function() {
         const title = this.querySelector('h3').textContent;
-        console.log('Clicked on article: ' + title);
+        const category = this.querySelector('.category-badge').textContent;
+        console.log('Clicked on article: ' + title + ' (' + category + ')');
+        // Optional: Show modal with article details
+    });
+    
+    // Add hover effect feedback
+    card.addEventListener('mouseenter', function() {
+        this.style.cursor = 'pointer';
     });
 });
 
-// Add interactivity to category cards
+// Category card interactivity
+document.querySelectorAll('.category-card').forEach(card => {
+    card.addEventListener('click', function() {
+        const category = this.querySelector('h3').textContent;
+        showModal('Category: ' + category, 'Explore all articles in this category. More content coming soon!');
+    });
+});
+
+// Learning path card interactions
+document.querySelectorAll('.program-card').forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        this.style.cursor = 'pointer';
+        this.style.backgroundColor = '#f0f0f0';
+    });
+    card.addEventListener('mouseleave', function() {
+        this.style.backgroundColor = '';
+    });
+    card.addEventListener('click', function() {
+        const title = this.querySelector('h3').textContent;
+        showModal('Learning Path: ' + title, 'Get started with this learning path today! Check back soon for detailed course recommendations and resources.');
+    });
+});
+
+// Modal function for displaying information
+function showModal(title, content) {
+    alert(title + '\n\n' + content);
+}
+
+// Search functionality (optional - can be expanded)
+function searchArticles(query) {
+    const cards = document.querySelectorAll('.news-card');
+    cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        if (text.includes(query.toLowerCase())) {
+            card.style.display = '';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+// Add category filter functionality
+document.querySelectorAll('.category-card').forEach(card => {
+    card.addEventListener('click', function() {
+        const category = this.querySelector('h3').textContent;
+        filterByCategory(category);
+    });
+});
+
+function filterByCategory(category) {
+    const cards = document.querySelectorAll('.news-card');
+    cards.forEach(card => {
+        const badge = card.querySelector('.category-badge').textContent.trim();
+        if (badge.toLowerCase().includes(category.toLowerCase()) || category.toLowerCase().includes(badge.toLowerCase())) {
+            card.style.display = '';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+}
+
+// Newsletter subscription (placeholder)
+const newsletterBtn = document.querySelector('[data-newsletter]');
+if (newsletterBtn) {
+    newsletterBtn.addEventListener('click', function() {
+        const email = prompt('Enter your email to subscribe to TechEdu newsletter:');
+        if (email) {
+            alert('Thank you for subscribing to TechEdu! Check your email for confirmation.');
+        }
+    });
+}
 document.querySelectorAll('.category-card').forEach(card => {
     card.addEventListener('click', function() {
         const category = this.querySelector('h3').textContent;
